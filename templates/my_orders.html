@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h2>Мои заказы</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Номер заказа</th>
+                <th>Номер телефона</th>
+                <th>Сумма заказа</th>
+                <th>Товары</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.order_id }}</td>
+                <td>{{ order.phone }}</td>
+                <td>{{ order.total }}</td>
+                <td>
+                    <ul>
+                    {% for product in order.products %}
+                        <li>
+                            <a href="{{ url_for('product_detail', product_id=product['id']) }}">
+                                <img src="{{ product['image'] }}" alt="{{ product['name'] }}" style="width: 50px;">
+                                {{ product['name'] }}
+                            </a>
+                            - {{ product['quantity'] }} шт. по {{ product['price'] }} руб.
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}

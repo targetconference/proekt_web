@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% for order in cart_item_orders %}
+        <p>{{order.name}}</p>
+        <p>{{order.addres}}</p>
+        <p></p>
+        <p></p>
+        <p></p>
+    {% endfor %}
+
+{% endblock %}

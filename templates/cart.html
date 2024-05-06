@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="col-md-12">
+                <ul>
+                    {% for message, category in messages %}
+                        <li class="alert alert-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+    <h1>Корзина</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <form method="POST" action="/place_order">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Имя</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Адрес</label>
+                    <textarea class="form-control" id="address" name="address" rows="4" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Электронная почта</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Номер телефона</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="mb-3">
+                    <label for="payment" class="form-label">Платежная информация</label>
+                    <select class="form-select" id="payment" name="payment" required>
+                        <option value="Credit card">Кредитная карта</option>
+                        <option value="Debit card">Дебетовая карточка</option>
+                        <option value="PayPal">payPal</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="card_name" class="form-label">Имя на карте</label>
+                    <input type="text" class="form-control" id="card_name" name="card_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="card_number" class="form-label">Номер кредитной карты</label>
+                    <input type="text" class="form-control" id="card_number" name="card_number" required>
+                </div>
+                <div class="mb-3">
+                    <label for="expiration" class="form-label">Срок годности</label>
+                    <input type="text" class="form-control" id="expiration" name="expiration" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cvv" class="form-label">cvv</label>
+                    <input type="text" class="form-control" id="cvv" name="cvv" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Заказат</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h2>Итог заказа</h2>
+            <p><strong>Общая сумма: {{ total_amount }} руб.</strong></p>
+            <ul>
+                {% for item in cart_products %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="{{ url_for('product_detail', product_id=item.product.id) }}"><img src="{{ item.product.image }}" class="card-img-top" alt="{{ item.product.name }}"></a> 
+                        </div>
+                        <div class="col-md-9">
+                            <a href="{{ url_for('product_detail', product_id=item.product.id) }}"><h4>{{ item.product.name }}</h4></a>
+                            <p>{{ item.product.description | truncate(100, true, '...')  }}</p>
+                            <p>Цена: {{ item.product.price }} руб.</p>
+                            <p>Количество: {{ item.quantity }}</p>
+                            <form method="POST" action="/remove_from_cart/{{ item.product.id }}">
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            </form>                                
+                        </div>
+                    </div><br><br>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

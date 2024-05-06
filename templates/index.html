@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block text_center %}
+<div class="pagetop-cntnt text-center">
+    <h1>Добро пожаловать в интернет-магазин аптеки "Ваше здоровье"</h1>
+    <p>Здесь вы найдете все необходимые лекарства и медицинские товары для поддержания вашего здоровья. Мы предлагаем бесплатные консультации и гарантируем качество каждого продукта. Наши квалифицированные специалисты всегда готовы помочь вам в выборе нужного товара.</p>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="images-container d-flex justify-content-around">
+                <img src="{{ url_for('static', filename ='img/1.webp') }}" title="Лекарства" alt="Лекарства" class="img-fluid">
+                <img src="{{ url_for('static', filename ='img/2.webp') }}" title="Уходовые средства" alt="Уходовые средства" class="img-fluid">
+            </div>
+            <h2 class="mt-5 text-center">Почему стоит доверять нам?</h2>
+            <p>Наши клиенты ценят нас за широкий ассортимент, доступные цены и высокое качество обслуживания. Мы работаем напрямую с производителями, что позволяет нам предлагать лучшие цены.</p>
+            <ul>
+                <li>Индивидуальный подход к каждому клиенту.</li>
+                <li>Профессиональная консультация и помощь в выборе.</li>
+                <li>Гарантия качества на все товары.</li>
+                <li>Быстрая и удобная доставка по всей стране.</li>
+            </ul>
+            <h2 class="text-center">Все для вашего здоровья в одном месте</h2>
+            <p>Мы обеспечиваем полный спектр услуг – от продажи лекарств до консультаций и диагностических услуг. С нами вы можете быть уверены в вашем здоровье!</p>
+            <h2 class="text-center">Новые</h2>
+            <div class="container">
+                <div class="row">
+                        {% for product in products %}
+                            <div class="col-md-4 col-sm-6 col-xs-12 mb-4">
+                                <div class="card h-100 shadow-sm">
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}"> <img src="{{ product.image }}" class="card-img-top" alt="Изображение продукта" style="height: 200px; object-fit: cover;"></a>
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">{{ product.name | truncate(20, true, '...') }}</h5>
+                                        <p class="card-text">{{ product.description | truncate(50, true, '...') }}</p>
+                                        <ul class="list-unstyled mb-auto">
+                                            <li>Цена: <strong>{{ product.price  }} руб.</strong></li>
+                                            <li>Категория: <strong>{{ product.category }}</strong></li>
+                                        </ul>
+                                        <div>
+                                            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-info">Подробнее</a><br><br>
+                                            <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+                                                <button class="btn btn-primary">Добавить в корзину</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
+{% endblock %}

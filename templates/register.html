@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+<head>
+	<meta charset="UTF-8">
+	<title>Регистрация</title>
+</head>
+{% block body %}
+<body>
+    <h2 class="text-center">Страница регистрации</h2><br>
+    <form method="POST" class="container">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <!-- {{ form.username.label(class="form-label") }} -->
+            {{ form.username(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <!-- {{ form.password.label(class="form-label") }} -->
+            {{ form.password(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary btn-block") }}
+    </form>
+    &nbsp;<p>Уже есть аккаунт? <a href="{{ url_for('login') }}">авторизоваться</a></p>
+</body>
+{% endblock %}

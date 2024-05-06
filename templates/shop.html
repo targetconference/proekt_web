@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container content2">
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="listProduct list d-flex  justify-content-start ftco-animate  flex-wrap" id="listProduct">
+                    <li class="list-group-item m-1 list-group-item-action type-mis ftco-animate">Все</li>
+                    <li class="list-group-item m-1 list-group-item-action  type-mis ftco-animate">Лекарства</li>
+                    <li class="list-group-item m-1 list-group-item-action  type-mis ftco-animate">Витамины</li>
+                    <li class="list-group-item m-1 list-group-item-action  type-mis ftco-animate">Красота</li>
+                    <li class="list-group-item m-1 list-group-item-action  type-mis ftco-animate">Гигиена</li>
+                    <li class="list-group-item m-1 list-group-item-action  type-mis ftco-animate">Медтовары</li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="col-md-12">
+                                <ul>
+                                    {% for message, category in messages %}
+                                        <li class="alert alert-{{ category }}">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="container">
+                        <div class="row">
+                            {% for product in products %}
+                                <div class="col-md-4 col-sm-6 col-xs-12 mb-4">
+                                    <div class="card h-100 shadow-sm">
+                                        <a href="{{ url_for('product_detail', product_id=product.id) }}"> <img src="{{ product.image }}" class="card-img-top" alt="Изображение продукта" style="height: 200px; object-fit: cover;"></a>
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title">{{ product.name | truncate(20, true, '...') }}</h5>
+                                            <p class="card-text">{{ product.description | truncate(50, true, '...') }}</p>
+                                            <ul class="list-unstyled mb-auto">
+                                                <li>Цена: <strong>{{ product.price  }} руб.</strong></li>
+                                                <li>Категория: <strong>{{ product.category }}</strong></li>
+                                            </ul>
+                                            <div>
+                                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-info">Подробнее</a><br><br>
+                                                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+                                                    <button class="btn btn-primary">Добавить в корзину</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>             
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.type-mis').on('click', function () {
+                var selectedCategory = $(this).text().trim();
+                
+                if (selectedCategory === "Все") {
+                    $('.col-md-4').show();
+                } else {
+                    $('.col-md-4').each(function () {
+                        var productCategory = $(this).find('strong').last().text();
+                        if (productCategory !== selectedCategory) {
+                            $(this).hide();
+                        } else {
+                            $(this).show();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}
